@@ -42,7 +42,9 @@ Beta_Sim_1_CI <- quantile(exp(Beta_Sim[[3]][,11]),c(0.025,0.975))
 colnames(XMat)  ### Col 11 is the one we care about 
 
 ## Just the ones we care about
-plotCI(11, Beta_Sim_1_mean, Beta_Sim_1_mean-Beta_Sim_1_CI[1], -Beta_Sim_1_mean+Beta_Sim_1_CI[2])
+plotCI(11, Beta_Sim_1_mean, Beta_Sim_1_mean-Beta_Sim_1_CI[1], -Beta_Sim_1_mean+Beta_Sim_1_CI[2],
+       xlab = "FY20 Indicator",
+       ylab = "Estimate of Relative Risk")
 
 Beta_Sim_1_mean
 Beta_Sim_1_CI
@@ -80,14 +82,18 @@ Beta_Sim <- post_est(XMat, Y, mu, tau2, logmu0, S, depend=TRUE)
 colnames(XMat)  ### Col 11, 12 is the one we care about 
 
 #Get Estimates and CI's 
+#indicator for FY20
 Beta_Sim_2_mean <- mean(exp(Beta_Sim[[3]][,12]))# 12 is the Indicator 
 Beta_Sim_2_CI <- quantile(exp(Beta_Sim[[3]][,12]),c(0.025,0.975)) 
 
+#Fixed effect for all Fiscal Years 
 Beta_Sim_22_mean <- mean(exp(Beta_Sim[[3]][,11])) # 11 is the year 
 Beta_Sim_22_CI <- quantile(exp(Beta_Sim[[3]][,11]),c(0.025,0.975))
 
 ## Look at jus the indicator we care about
-plotCI(12, Beta_Sim_2_mean, Beta_Sim_2_mean-Beta_Sim_2_CI[1], -Beta_Sim_2_mean+Beta_Sim_2_CI[2])
+plotCI(12, Beta_Sim_2_mean, Beta_Sim_2_mean-Beta_Sim_2_CI[1], -Beta_Sim_2_mean+Beta_Sim_2_CI[2],
+       xlab = "FY20 Indicator",
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_2_mean 
 Beta_Sim_2_CI 
 
@@ -95,7 +101,9 @@ Beta_Sim_2_CI
 plot(Beta_Sim[[3]][,12], type = "l", ylab = "Fall 2019 Indicator", main = "Model 2")
 
 ## Look at Other Variables
-plotCI(12, Beta_Sim_22_mean, Beta_Sim_22_mean-Beta_Sim_22_CI[1], -Beta_Sim_22_mean+Beta_Sim_22_CI[2])
+plotCI(12, Beta_Sim_22_mean, Beta_Sim_22_mean-Beta_Sim_22_CI[1], -Beta_Sim_22_mean+Beta_Sim_22_CI[2], 
+       xlab = "Fixed Effect for Fiscal Year", 
+       ylab = "Estimate")
 
 Beta_Sim_22_mean 
 Beta_Sim_22_CI
@@ -119,16 +127,23 @@ mu=matrix(rep(0,ncol(XMat)))
 logmu0 <-log(mean(Y))
 S=50000
 
+#Run the model
+Beta_Sim <- post_est(XMat, Y, mu, tau2, logmu0, S, depend=TRUE)
+
+
 #find the col for the variable we care about 
 colnames(XMat)  ### Col 11 is the one we care about 
 
-Beta_Sim <- post_est(XMat, Y, mu, tau2, logmu0, S, depend=TRUE)
+#Get estimate and CI
 Beta_Sim_3_mean <- mean(exp(Beta_Sim[[3]][,11]))
 Beta_Sim_3_CI <- quantile(exp(Beta_Sim[[3]][,11]),c(0.025,0.975))
 
 
+
 ## Just the indicator we care about
-plotCI(11, Beta_Sim_3_mean, Beta_Sim_3_mean-Beta_Sim_3_CI[1], -Beta_Sim_3_mean+Beta_Sim_3_CI[2])
+plotCI(11, Beta_Sim_3_mean, Beta_Sim_3_mean-Beta_Sim_3_CI[1], -Beta_Sim_3_mean+Beta_Sim_3_CI[2],
+       xlab = "FY20 Indicator",
+       ylab = "Estimate of Relative Risk")
 
 Beta_Sim_3_mean
 Beta_Sim_3_CI
@@ -154,7 +169,7 @@ logmu0 <-log(mean(Y))
 S=50000
 
 #find the columns we care about 
-colnames(XMat)  ### Col 11, 12 is the one we care about 
+colnames(XMat)  ### Col 11(FY20 = T), 12(HomeGame = T) is the one we care about 
 
 #Run the model
 Beta_Sim <- post_est(XMat, Y, mu, tau2, logmu0, S, depend=TRUE)
@@ -168,7 +183,10 @@ Beta_Sim_4_CI_fb <- quantile(exp(Beta_Sim[[3]][,12]),c(0.025,0.975))
 
 
 ## Just the indicators we care about
-plotCI(11, Beta_Sim_4_mean, Beta_Sim_4_mean-Beta_Sim_1_CI[1], -Beta_Sim_4_mean+Beta_Sim_4_CI[2])
+plotCI(11, Beta_Sim_4_mean, Beta_Sim_4_mean-Beta_Sim_1_CI[1], -Beta_Sim_4_mean+Beta_Sim_4_CI[2],
+       xlab = "FY20 Indicator",
+       ylab = "Estimate of Relative Risk")
+
 Beta_Sim_4_mean
 Beta_Sim_4_CI
 
@@ -176,13 +194,15 @@ Beta_Sim_4_CI
 plot(Beta_Sim[[3]][,11], type = "l", ylab = "Fall 2019 Indicator", main = "Model 4")
 
 #Other Variables 
-plotCI(12, Beta_Sim_4_mean_fb, Beta_Sim_4_mean_fb-Beta_Sim_4_CI_fb[1], -Beta_Sim_4_mean_fb+Beta_Sim_4_CI_fb[2])
+plotCI(12, Beta_Sim_4_mean_fb, Beta_Sim_4_mean_fb-Beta_Sim_4_CI_fb[1], -Beta_Sim_4_mean_fb+Beta_Sim_4_CI_fb[2],
+       xlab = "Home Game Indicator", 
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_4_mean_fb
 Beta_Sim_4_CI_fb #home football doesn't change rides
 
 
 ########################################################
-##### Model 5: Indicator, Canvas VS Huges
+##### Model 5: Indicator, Canvas VS Hughes
 #########################################################
 
 #Get Data
@@ -201,6 +221,9 @@ S=50000
 #Run Model
 Beta_Sim <- post_est(XMat, Y, mu, tau2, logmu0, S, depend=TRUE)
 
+#Find the indicators we care about
+colnames(XMat)  ### Col 11(FY20 = T), 12  (Canvas = T), 13 (Hughes = T), 14 (Showdown = T) is the one we care about 
+
 #Get Estimates and CI's 
 Beta_Sim_5_mean <- mean(exp(Beta_Sim[[3]][,11]))
 Beta_Sim_5_CI <- quantile(exp(Beta_Sim[[3]][,11]),c(0.025,0.975))
@@ -214,11 +237,11 @@ Beta_Sim_5_CI_huges <- quantile(exp(Beta_Sim[[3]][,13]),c(0.025,0.975))
 Beta_Sim_5_mean_sd <- mean(exp(Beta_Sim[[3]][,14]))
 Beta_Sim_5_CI_sd <- quantile(exp(Beta_Sim[[3]][,14]),c(0.025,0.975))
 
-#Find the indicators we care about
-colnames(XMat)  ### Col 11, 12 is the one we care about 
 
 ## Just the indicator we care about
-plotCI(11, Beta_Sim_4_mean, Beta_Sim_4_mean-Beta_Sim_1_CI[1], -Beta_Sim_4_mean+Beta_Sim_4_CI[2])
+plotCI(11, Beta_Sim_4_mean, Beta_Sim_4_mean-Beta_Sim_1_CI[1], -Beta_Sim_4_mean+Beta_Sim_4_CI[2],
+       xlab = "FY20 Indicator",
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_4_mean
 Beta_Sim_4_CI
 
@@ -227,16 +250,22 @@ plot(Beta_Sim[[3]][,11], type = "l" , ylab = "Fall 2019 Indicator", main = "Mode
 
 
 #Other Variables 
-plotCI(12, Beta_Sim_5_mean_canvas, Beta_Sim_5_mean_canvas-Beta_Sim_5_CI_canvas[1], -Beta_Sim_5_mean_canvas+Beta_Sim_5_CI_canvas[2])
+plotCI(12, Beta_Sim_5_mean_canvas, Beta_Sim_5_mean_canvas-Beta_Sim_5_CI_canvas[1], -Beta_Sim_5_mean_canvas+Beta_Sim_5_CI_canvas[2],
+       xlab = "Game At Canvas Indicator",
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_5_mean_canvas
 Beta_Sim_5_CI_canvas #Canvas Games decreases rides 
 
 
-plotCI(12, Beta_Sim_5_mean_huges, Beta_Sim_5_mean_huges-Beta_Sim_5_CI_huges[1], -Beta_Sim_5_mean_huges+Beta_Sim_5_CI_huges[2])
+plotCI(12, Beta_Sim_5_mean_huges, Beta_Sim_5_mean_huges-Beta_Sim_5_CI_huges[1], -Beta_Sim_5_mean_huges+Beta_Sim_5_CI_huges[2],
+       xlab = "Game At Hughes Indicator",
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_5_mean_huges
-Beta_Sim_5_CI_huges #huges increases rides
+Beta_Sim_5_CI_huges #hughes increases rides
 
-plotCI(12, Beta_Sim_5_mean_sd, Beta_Sim_5_mean_sd-Beta_Sim_5_CI_sd[1], -Beta_Sim_5_mean_sd+Beta_Sim_5_CI_sd[2])
+plotCI(12, Beta_Sim_5_mean_sd, Beta_Sim_5_mean_sd-Beta_Sim_5_CI_sd[1], -Beta_Sim_5_mean_sd+Beta_Sim_5_CI_sd[2],
+       xlab = "Showdown Game Indicator",
+       ylab = "Estimate of Relative Risk")
 Beta_Sim_5_mean_sd
 Beta_Sim_5_CI_sd #show down games decrease rides like crazy 
 
